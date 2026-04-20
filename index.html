@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Dango Daikazoku — школа японского языка</title>
+    <!-- Подключаем аккуратный шрифт -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome для иконок (опционально, но улучшает вид) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #d4eaff 0%, #c8e6d9 40%, #b8dfc2 100%);
+            /* Голубой сверху → зелёный снизу */
+            min-height: 100vh;
+            color: #1a2e2c;
+            line-height: 1.5;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 🌸 САКУРА ПО БОКАМ (ветки с цветами) */
+        .sakura-left, .sakura-right {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 120px;
+            pointer-events: none;
+            z-index: 5;
+            background-repeat: repeat-y;
+            background-size: 90px auto;
+            opacity: 0.55;
+        }
+
+        .sakura-left {
+            left: 0;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 120\'%3E%3Cg fill=\'%23ffb7c5\' opacity=\'0.8\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'12\'/%3E%3Ccircle cx=\'48\' cy=\'18\' r=\'9\'/%3E%3Ccircle cx=\'18\' cy=\'48\' r=\’10\’/%3E%3Ccircle cx=\'36\' cy=\'52\' r=\'11\'/%3E%3Ccircle cx=\'60\' cy=\'38\' r=\'8\'/%3E%3C/g%3E%3Cpath d=\'M10 20 Q30 0 50 20 Q70 40 90 20\' stroke=\'%23d48c9c\' stroke-width=\'3\' fill=\'none\' opacity=\'0.7\'/%3E%3Cpath d=\'M5 70 Q30 50 55 70 Q80 90 95 70\' stroke=\'%23d48c9c\' stroke-width=\'3\' fill=\'none\' opacity=\'0.6\'/%3E%3C/svg%3E');
+            background-position: left top;
+        }
+
+        .sakura-right {
+            right: 0;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 120\'%3E%3Cg fill=\'%23ffb7c5\' opacity=\'0.8\'%3E%3Ccircle cx=\'70\' cy=\'20\' r=\'12\'/%3E%3Ccircle cx=\'52\' cy=\'38\' r=\'9\'/%3E%3Ccircle cx=\'82\' cy=\'48\' r=\'10\'/%3E%3Ccircle cx=\'64\' cy=\'62\' r=\'11\'/%3E%3Ccircle cx=\'40\' cy=\'18\' r=\'8\'/%3E%3C/g%3E%3Cpath d=\'M90 30 Q70 10 50 30 Q30 50 10 30\' stroke=\'%23d48c9c\' stroke-width=\'3\' fill=\'none\' opacity=\'0.7\'/%3E%3Cpath d=\'M95 80 Q70 60 45 80 Q20 100 5 80\' stroke=\'%23d48c9c\' stroke-width=\'3\' fill=\'none\' opacity=\'0.6\'/%3E%3C/svg%3E');
+            background-position: right top;
+        }
+
+        /* Для мобильных убираем фиксированные боковые ветки, чтобы не мешали */
+        @media (max-width: 900px) {
+            .sakura-left, .sakura-right {
+                display: none;
+            }
+        }
+
+        /* основной контейнер — всё по центру, поверх сакуры */
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(2px); /* легкое смягчение */
+        }
+
+        /* header / hero */
+        .hero {
+            padding: 48px 0 32px;
+            text-align: center;
+            border-bottom: 2px dashed #a1c6b0;
+        }
+
+        .school-name {
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0a2f44;
+            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .school-name small {
+            font-size: 1.2rem;
+            font-weight: 400;
+            display: block;
+            margin-top: 6px;
+            color: #1e4a5f;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 20px 0 12px;
+            color: #003153;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            max-width: 750px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 14px 24px;
+            border-radius: 48px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,240,0.6);
+        }
+
+        .free-badge {
+            display: inline-block;
+            background: #e63946;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            margin-top: 18px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* общие стили секций */
+        section {
+            margin: 60px 0;
+        }
+
+        h3 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #0a3340;
+            border-left: 8px solid #c44b6b;
+            padding-left: 20px;
+        }
+
+        .subhead {
+            font-size: 1.3rem;
+            margin-bottom: 32px;
+            font-weight: 500;
+            color: #1f4e3d;
+        }
+
+        /* сетка причин */
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .reason-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            padding: 28px 20px;
+            border-radius: 32px;
+            border: 1px solid rgba(250, 240, 230, 0.8);
+            box-shadow: 0 8px 18px -6px rgba(30, 50, 40, 0.15);
+            transition: transform 0.2s;
+        }
+
+        .reason-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .reason-card i {
+            font-size: 2.2rem;
+            color: #b4445c;
+            margin-bottom: 16px;
+        }
+
+        .reason-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #1a3a3a;
+        }
+
+        /* программы — 4 карточки */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .program-card {
+            background: rgba(255, 250, 240, 0.7);
+            backdrop-filter: blur(6px);
+            padding: 28px 16px 24px;
+            border-radius: 28px;
+            border: 1px solid #dcd0c0;
+            box-shadow: 0 6px 14px rgba(60, 70, 50, 0.1);
+            transition: all 0.15s;
+        }
+
+        .program-card:hover {
+            background: #fef9f0;
+            box-shadow: 0 12px 22px -8px #2a4b3c30;
+        }
+
+        .program-level {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #a1314b;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .program-duration {
+            font-weight: 600;
+            color: #2d6a4f;
+            margin-bottom: 16px;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+
+        .program-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+
+        .program-list li {
+            padding: 6px 0 6px 22px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .program-list li::before {
+            content: "🌸";
+            position: absolute;
+            left: 0;
+            color: #d86f8a;
+            font-size: 0.9rem;
+        }
+
+        .program-desc {
+            margin-top: 20px;
+            font-style: italic;
+            border-top: 1px dashed #9bb7a8;
+            padding-top: 16px;
+            color: #1e4a3f;
+        }
+
+        /* преподаватели */
+        .teachers-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .teacher-card {
+            background: #f5efe8e0;
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 28px 24px;
+            flex: 1 1 260px;
+            max-width: 320px;
+            border: 1px solid #eddac8;
+            box-shadow: 0 10px 18px -8px #2d4a3a30;
+        }
+
+        .teacher-avatar {
+            width: 100px;
+            height: 100px;
+            background: #cdaa9e;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: #462c2c;
+            background: linear-gradient(145deg, #f3cdcd, #e4b8b8);
+            box-shadow: 0 4px 8px #ba9b8b60;
+            border: 3px solid white;
+        }
+
+        .teacher-card h4 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .teacher-role {
+            font-weight: 500;
+            color: #a53f56;
+            margin: 6px 0 14px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2d6a4f;
+            color: #1a4e3d;
+            padding: 14px 32px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 48px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 30px;
+            display: inline-block;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-outline:hover {
+            background: #2d6a4f;
+            color: white;
+            border-color: #2d6a4f;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* отзывы */
+        .reviews-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .review-card {
+            background: #e2f0e6d9;
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 30px 24px;
+            flex: 1 1 280px;
+            max-width: 360px;
+            border: 1px solid #b7cfbe;
+        }
+
+        .review-author {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #1e3a2f;
+        }
+
+        .review-text {
+            margin: 16px 0 8px;
+            font-size: 1rem;
+        }
+
+        /* форма */
+        .form-section {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 40px 36px;
+            margin: 50px 0 40px;
+            border: 1px solid #d4e2d0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #15372b;
+        }
+
+        input, select, textarea {
+            padding: 14px 18px;
+            border-radius: 40px;
+            border: 1px solid #9eb9a8;
+            background: #fefcf7;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.15s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #b3445e;
+            box-shadow: 0 0 0 3px #f7cfd6;
+        }
+
+        textarea {
+            border-radius: 28px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            background: #c94f6b;
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 24px;
+            width: fit-content;
+            box-shadow: 0 6px 12px #b35a6b60;
+            border: 1px solid #ffdbdb;
+        }
+
+        .btn-primary:hover {
+            background: #a73e57;
+            transform: scale(1.02);
+        }
+
+        footer {
+            padding: 30px 0 20px;
+            text-align: center;
+            color: #1d4237;
+            font-weight: 500;
+        }
+
+        /* адаптив */
+        @media (max-width: 1000px) {
+            .programs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .programs-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            .school-name {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* кнопки "открыть" */
+        .open-more {
+            margin-top: 40px;
+        }
+
+        /* декоративная линия */
+        .divider {
+            width: 120px;
+            height: 4px;
+            background: #cb7a8c;
+            margin: 16px 0 30px;
+            border-radius: 4px;
+        }
+
+        /* цитата-заголовок */
+        .motto {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #1f513e;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Сакура по бокам (фиксированные полосы с цветами) -->
+    <div class="sakura-left" aria-hidden="true"></div>
+    <div class="sakura-right" aria-hidden="true"></div>
+
+    <div class="wrapper">
+        <!-- Hero / Верх -->
+        <div class="hero">
+            <div class="school-name">
+                Dango Daikazoku
+                <small>языковая школа</small>
+            </div>
+            <h2>Заговори на японском уже через 6 месяцев</h2>
+            <div class="hero-description">
+                Живое общение, учителя-носители из Токио, авторская методика погружения в культуру. Первое занятие — бесплатно.<br>
+                <strong>Онлайн – Офлайн в Москве</strong>
+            </div>
+            <div class="free-badge">
+                ✨  пробный урок — 0 ₽
+            </div>
+        </div>
+
+        <!-- Почему стоит выбрать нас -->
+        <section>
+            <h3>Почему стоит выбрать нас</h3>
+            <div class="motto">«Изучайте японский с удовольствием»</div>
+            <div class="reasons-grid">
+                <div class="reason-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>Носители языка</h4>
+                    <p>Все преподаватели-японцы — с лингвистическим образованием и опытом от 5 лет.</p>
+                </div>
+                <div class="reason-card">
+                    <i class="fas fa-laptop-house"></i>
+                    <h4>Гибкий формат</h4>
+                    <p>Онлайн, в классе или гибридное обучение. Занятия в группах или индивидуальные. Утренние и вечерние группы.</p>
+                </div>
+                <div class="reason-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h4>Удобное расписание</h4>
+                    <p>Вы можете заморозить курс, сменить группу или формат обучения, запросить возмещение урока или посмотреть его онлайн в записи.</p>
+                </div>
+                <div class="reason-card">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h4>Индивидуальный подход</h4>
+                    <p>Делаем всё, чтобы вы с комфортом смогли добиться поставленных целей.</p>
+                </div>
+                <div class="reason-card">
+                    <i class="fas fa-chalkboard"></i>
+                    <h4>Культурные мероприятия</h4>
+                    <p>Каллиграфия, чайные церемонии, разговорные клубы с носителями каждую неделю. Также организовываем поездки в Японию для своих учеников.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Программы -->
+        <section>
+            <h3>Программы</h3>
+            <div class="subhead">Выбери свой путь</div>
+            <div class="programs-grid">
+                <!-- Начальный -->
+                <div class="program-card">
+                    <div class="program-level">Начальный уровень</div>
+                    <ul class="program-list">
+                        <li>азбуки хирагана и катакана</li>
+                        <li>падежи</li>
+                        <li>употребление прилагательных</li>
+                        <li>спряжение и основные формы глаголов</li>
+                        <li>140 иероглифов</li>
+                    </ul>
+                    <div class="program-desc">Научитесь говорить о себе, своих интересах и своей семье. Поддерживайте простой разговор на бытовые темы.</div>
+                </div>
+                <!-- Базовый -->
+                <div class="program-card">
+                    <div class="program-level">Базовый уровень</div>
+                    <div class="program-duration">• 9 месяцев •</div>
+                    <ul class="program-list">
+                        <li>развернутые предложения</li>
+                        <li>наклонения глаголов</li>
+                        <li>залоговые формы глаголов</li>
+                        <li>вежливая речь кейго</li>
+                        <li>300 иероглифов</li>
+                    </ul>
+                    <div class="program-desc">Научитесь более подробно и красиво выражать свои мысли. Говорите о своих намерениях и аргументируйте свое мнение по различным вопросам.</div>
+                </div>
+                <!-- Средний -->
+                <div class="program-card">
+                    <div class="program-level">Средний уровень</div>
+                    <div class="program-duration">• 12 месяцев •</div>
+                    <ul class="program-list">
+                        <li>разговорные обороты речи</li>
+                        <li>письменный стиль</li>
+                        <li>чтение статей и рассказов</li>
+                        <li>650 иероглифов</li>
+                    </ul>
+                    <div class="program-desc">Освойте как разговорные обороты речи для неформального общения с японцами, так и официальный стиль речи для работы. Научитесь читать несложные книги, написанные базовой лексикой и иероглифами.</div>
+                </div>
+                <!-- Продвинутый -->
+                <div class="program-card">
+                    <div class="program-level">ПРОДВИНУТЫЙ УРОВЕНЬ</div>
+                    <div class="program-duration">• 12 месяцев •</div>
+                    <ul class="program-list">
+                        <li>профессиональная лексика</li>
+                        <li>просмотр новостей</li>
+                        <li>чтение газетных статей</li>
+                        <li>1000 иероглифов</li>
+                    </ul>
+                    <div class="program-desc">Освойте японский язык на профессиональном уровне, достаточном для обучения в университете или работы в японской компании</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Преподаватели -->
+        <section>
+            <h3>Преподаватели</h3>
+            <div class="teachers-grid">
+                <div class="teacher-card">
+                    <div class="teacher-avatar">小野</div>
+                    <h4>Коидзуми Оно</h4>
+                    <div class="teacher-role">Преподаватель N5-N4</div>
+                    <p>10 лет в преподавании, магистр лингвистики Университета Васэда. На своих занятиях погружает учеников в атмосферу японского языка и культуры.</p>
+                </div>
+                <div class="teacher-card">
+                    <div class="teacher-avatar">長門</div>
+                    <h4>Нагато Минори</h4>
+                    <div class="teacher-role">Разговорный клуб, бизнес-курс</div>
+                    <p>東海大学 文学部 西洋史専攻 (специальность: история России); Japan foundation курс для преподавателей японского языка. Живёт в Москве 8 лет, объясняет сложное просто и с юмором.</p>
+                </div>
+                <div class="teacher-card">
+                    <div class="teacher-avatar">АА</div>
+                    <h4>Анна Алексеевна</h4>
+                    <div class="teacher-role">Методист, подготовка к JLPT</div>
+                    <p>Окончила МГУ им. М.В. Ломоносова. Жила и работала в Токио 3 года (переводчиком в игровой студии). Сдала JLPT N1. Верит, что если приложить старание, можно научиться всему, в том числе и японскому языку.</p>
+                </div>
+            </div>
+            <div class="center open-more">
+                <button class="btn-outline" onclick="alert('Полный список преподавателей появится позже :)')">Открыть полный лист преподавателей</button>
+            </div>
+        </section>
+
+        <!-- Отзывы -->
+        <section>
+            <h3>Отзывы учеников</h3>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-author">Мария, 24 года</div>
+                    <div class="review-text">"Пришла в школу с нуля, потому что захотелось смотреть аниме на языке оригинала и всё понимать. Думала, брошу через месяц из-за сложных иероглифов. Но Анна-сэнсэй так классно и понятно всё объясняет, что я втянулась. Сейчас спокойно читаю посты японских художников в соцсетях и даже понимаю шутки! Отдельное спасибо за разговорный клуб там я впервые заговорила без стеснения."</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-author">Игорь, 30 лет</div>
+                    <div class="review-text">"Готовился к собеседованию в японский филиал Rakuten. Нужен был №3. В обычной онлайн-школе давали сухую теорию, а здесь Коидзуми-сэнсэй натаскал меня именно по формату собеседования. Теперь знаю, когда что лучше сказать, а когда лучше промолчать. Собеседование прошёл, сейчас жду визу. Школа реально меняет жизнь."</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-author">Елена, 42 года</div>
+                    <div class="review-text">"Учила японский в институте 20 лет назад, всё забыла. Записалась на занятия с Нагато-сэнсэй. Очень боялась говорить, думала, что у меня ужасный акцент. Нагато-сэнсэй очень терпеливая, постоянно хвалит, но при этом мягко исправляет ошибки. Атмосфера в школе очень дружелюбная, чувствуешь себя частью семьи."</div>
+                </div>
+            </div>
+            <div class="center open-more">
+                <button class="btn-outline" onclick="alert('Ещё больше вдохновляющих историй скоро!')">Открыть больше отзывов</button>
+            </div>
+        </section>
+
+        <!-- Бесплатный пробный урок -->
+        <section class="form-section">
+            <h3 style="border-left-color: #7fa38b;">Бесплатный пробный урок</h3>
+            <p style="font-size: 1.2rem; margin-bottom: 32px;">Запишитесь на занятие<br>Мы подберём удобное время и познакомим с преподавателями.</p>
+            <form onsubmit="alert('Спасибо! Мы свяжемся с вами в ближайшее время.'); return false;">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Ваше имя</label>
+                        <input type="text" placeholder="Александра" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="hello@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" placeholder="+7 ..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Желаемый курс</label>
+                        <select>
+                            <option>Начальный</option>
+                            <option>Базовый</option>
+                            <option>Средний</option>
+                            <option>Продвинутый</option>
+                            <option>Пока не знаю</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Комментарий</label>
+                        <textarea rows="3" placeholder="Удобное время, пожелания..."></textarea>
+                    </div>
+                </div>
+                <div class="center">
+                    <button type="submit" class="btn-primary">Записаться на пробный урок</button>
+                </div>
+            </form>
+        </section>
+
+        <footer>
+            <p>🌸 Dango Daikazoku · Москва, online · заговори на японском с удовольствием 🌸</p>
+            <p style="margin-top: 12px; opacity: 0.8;">© 2026 школа японского языка</p>
+        </footer>
+    </div>
+
+    <!-- простой скрипт для демонстрации кнопок (уже встроено) -->
+    <script>
+        // можно оставить пустым, все onclick уже прописаны
+    </script>
+</body>
+</html>
